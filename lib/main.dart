@@ -1,25 +1,67 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:munazara_app/Screens/Welcome/welcome_screen.dart';
-import 'package:munazara_app/ana_sayfa.dart';
-import 'package:munazara_app/constant.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:munazara_app/Controller/authentication_services.dart';
+import 'package:munazara_app/View/sign_in.dart';
+import 'package:provider/provider.dart';
+import 'Model/constant.dart';
+import 'View/Screens/Welcome/welcome_screen.dart';
+import 'View/ana_sayfa.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(Login());
 }
 
 class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Münazara Test 1.0',
-      theme: ThemeData(
-        primaryColor: kPrimaryColor,
-        scaffoldBackgroundColor: kPrimaryLightColor,
+    return MultiProvider(
+      providers: [
+        Provider<AuthenticationService>(
+          create: (_) => AuthenticationService(FirebaseAuth.instance),
+        ),
+        // Access authentication services
+        StreamProvider(
+          create: (context) =>
+              context.read<AuthenticationService>().authStateChanges,
+        ),
+      ],
+      child: MaterialApp(
+        /**
+      initialRoute: 'homeScreen',
+      routes: {
+        'homeScreen': (context) => Login(),
+      },
+          **/
+        title: 'ÖyleyseVarım Test 1.0',
+        theme: ThemeData(
+          primaryColor: kPrimaryColor,
+          scaffoldBackgroundColor: kPrimaryLightColor,
+        ),
+        home: AuthenticationWrapper(),
       ),
-      home: WelcomeScreen(),
     );
+  }
+}
+
+class AuthenticationWrapper extends StatelessWidget {
+  const AuthenticationWrapper({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final firebaseUser = context.watch<User>();
+
+    if (firebaseUser != null) {
+      return Home();
+    }
+    return SignInPage();
   }
 }
 
@@ -53,21 +95,11 @@ class _HomeState extends State<Home> {
     return MaterialApp(
       home: Scaffold(
         backgroundColor: kPrimaryLightColor,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Text(
-            'Münazara Test 1.0',
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
+        appBar: getCustomAppBar(context),
         body: tabs[_currentIndex],
         bottomNavigationBar: CurvedNavigationBar(
           backgroundColor: kPrimaryLightColor,
-          /*type: BottomNavigationBarType.fixed,
-          currentIndex: _currentIndex,
-          iconSize: 20,
-          selectedFontSize: 15,
-          unselectedFontSize: 12, */
+          height: 50,
           items: [
             Icon(
               Icons.home,
@@ -104,4 +136,42 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+}
+
+getCustomAppBar(context) {
+  return PreferredSize(
+    preferredSize: Size.fromHeight(50),
+    child: Container(
+      alignment: Alignment.bottomCenter,
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(Icons.chevron_left),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => WelcomeScreen()),
+              );
+            },
+          ),
+          Text('Münazara Test 1.1'),
+          IconButton(
+              icon: Icon(Icons.menu),
+              onPressed: () {
+                context.read<AuthenticationService>().signOut();
+                Fluttertoast.showToast(
+                  msg: "SignOut",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.CENTER,
+                  timeInSecForIosWeb: 1,
+                );
+              }),
+        ],
+      ),
+    ),
+  );
 }

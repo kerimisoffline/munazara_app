@@ -1,4 +1,4 @@
-package com.example.munazara_app;
+package com.munazara.omniex;
 
 import io.flutter.embedding.android.FlutterActivity;
 

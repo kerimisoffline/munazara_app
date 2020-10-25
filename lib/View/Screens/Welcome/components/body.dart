@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:munazara_app/Components/roundedButton.dart';
-import 'package:munazara_app/Screens/Welcome/components/background.dart';
-import 'package:munazara_app/constant.dart';
+import 'package:munazara_app/Controller/authentication_services.dart';
+import 'package:munazara_app/Model/constant.dart';
+import 'package:munazara_app/Model/roundedButton.dart';
 import 'package:munazara_app/main.dart';
+import 'package:provider/provider.dart';
+import 'background.dart';
+
 
 class Body extends StatelessWidget {
   @override
@@ -28,9 +32,9 @@ class Body extends StatelessWidget {
               child: RoundedButton(
                 text: 'GİRİŞ',
                 press: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Home()));
-                },
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => AuthenticationWrapper()));
+                }
               ),
             ),
             Container(

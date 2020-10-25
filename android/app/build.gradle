@@ -33,11 +33,13 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.munazara_app"
+        applicationId "com.munazara.omniex"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        testInstrumentationRunner "androidX.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -52,3 +54,11 @@ android {
 flutter {
     source '../..'
 }
+
+dependencies {
+    androidTestİmplementation 'androidX.test:runner:1.1.1'
+    androidTestİmplementation 'androidX.test.espresso:espresso-core:3.1.1'
+    implementation 'com.android.support:multidex:1.0.3'
+}
+
+apply plugin: 'com.google.gms.google-services'
