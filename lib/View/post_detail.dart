@@ -1,92 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:munazara_app/Model/constant.dart';
-import 'package:munazara_app/View/post_detail.dart';
-import 'package:munazara_app/View/welcome_screen.dart';
 
-class CardOne extends StatefulWidget {
-  @override
-  _CardOneState createState() => _CardOneState();
-}
-
-class _CardOneState extends State<CardOne> {
-  @override
-  Widget build(BuildContext context) {
-    return akisCard();
-  }
-}
-
-// Akış sağlayacak olan metod
-
-akisCard() {
-  return Container(
-    child: SingleChildScrollView(
-      child: Wrap(
-        spacing: 5,
-        runSpacing: 2,
-        children: [
-          Container(
-            child: PostDetail(),
-          ),
-          Divider(
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Container(
-            child: InSide(),
-          ),
-          Divider(
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Container(
-            child: InSide(),
-          ),
-          Divider(
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Container(
-            child: InSide(),
-          ),
-          Divider(
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          Container(
-            child: InSide(),
-          ),
-          Divider(
-            color: Colors.black,
-          ),
-          SizedBox(
-            height: 5,
-          ),
-        ],
-      ),
-    ),
-  );
-}
 
 // Card konteynırının içini dolduracak olan widget.
 
-class InSide extends StatefulWidget {
+class PostDetail extends StatefulWidget {
   @override
-  _InSideState createState() => _InSideState();
+  _PostDetailState createState() => _PostDetailState();
 }
 
-class _InSideState extends State<InSide> {
-  final TextEditingController _textController = new TextEditingController();
+class _PostDetailState extends State<PostDetail> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -161,7 +84,7 @@ class _InSideState extends State<InSide> {
                               style: TextStyle(
                                   color: Colors.green,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 10),
+                                  fontSize: 16),
                             ),
                           ),
                         ),
@@ -198,47 +121,7 @@ class _InSideState extends State<InSide> {
                     ),
                   ],
                 ), // Evet-Yüzde-Hayır
-                // Paylaş, Favorile, Yorum Yap
-                Row(
-                  children: [
-                   Container(
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        height: MediaQuery.of(context).size.height * 0.05,
-                        child: Material(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: TextField(
-                            style: GoogleFonts.openSans(fontSize: 12),
-                            cursorColor: kPrimaryDarkColor,
-                            decoration: InputDecoration(
-                              hintStyle: GoogleFonts.openSans(fontSize: 10),
-                              hintText: 'Tarafını seç, Yorum Yap..',
-                              fillColor: Colors.white,
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    Container(
-                      child: IconButton(
-                        icon: Icon(Icons.share),
-                        onPressed: () {},
-                      ),
-                    ),
-                    Container(
-                      child: IconButton(
-                        icon: Icon(Icons.star),
-                        onPressed: () {},
-                      ),
-                    ),
-                    Container(),
-                  ],
-                ),
-
-                //Yorumlar(),
+                Yorumlar(),
                 // Yorumlar kısmı burada yani sistem en başından 2Yan-4Alt şeklinde
               ],
             ),
@@ -247,4 +130,131 @@ class _InSideState extends State<InSide> {
       ),
     );
   }
+}
+
+class Yorumlar extends StatefulWidget {
+  Yorumlar({Key key}) : super(key: key);
+
+  @override
+  _YorumlarState createState() => _YorumlarState();
+}
+
+class _YorumlarState extends State<Yorumlar> {
+  String cerenYorum =
+      'Sallanan bayrak teorisi gibi \n bu da birçok şeyi kanıtlar \n niteliktedir.';
+  String hakanYorum =
+      'Apollo 9 görevleri dahil bir çok\n görevde insanlık yasa \nboğulup acısıyla mutludur.';
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      child: Row(
+        children: [
+          // EVET yorumları
+          yorumlarEvetHayir(21, 'HAKAN', hakanYorum, 'assest/images/pp1.jpg',
+              '13 ve daha fazla yorum', context),
+          SizedBox(
+            width: size.width * 0.01,
+          ),
+          // HAYIR yorumları
+          yorumlarEvetHayir(3, 'CEREN', cerenYorum, 'assest/images/pp2.jpg',
+              '25 ve daha fazla yorum', context),
+        ],
+      ),
+    );
+  }
+}
+
+Widget yorumlarEvetHayir(
+    int yorumcuRutbe,
+    String yorumcuId,
+    String yorumAyrinti,
+    String avatarLokasyon,
+    String dahaFazlaYorum,
+    BuildContext context) {
+  Size size = MediaQuery.of(context).size;
+  return Row(
+    children: [
+      Stack(
+        children: [
+          Card(
+            child: Container(
+              height: size.height * 0.07,
+            ),
+          ),
+          FractionalTranslation(
+            translation: Offset(0.0, 0),
+            child: Align(
+              child: CircleAvatar(
+                radius: 12,
+                backgroundColor: Colors.lime,
+                backgroundImage:
+                    AssetImage('$avatarLokasyon'), // assest/images/pp2.jpg
+              ),
+            ),
+          ),
+        ],
+      ),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Colors.white,
+            ),
+            height: size.height * 0.030,
+            width: size.width * 0.15,
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Row(
+                children: [
+                  Text(
+                    '($yorumcuRutbe)',
+                    style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    '$yorumcuId',
+                    style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
+                  )
+                ],
+              ),
+            ),
+          ), // rütbe ve isim
+          Container(
+            margin: EdgeInsets.only(top: 5),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Text(
+                '$yorumAyrinti',
+                style: TextStyle(fontSize: 8),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.sms,
+                  size: 10,
+                ),
+                Container(
+                  child: Text(
+                    '$dahaFazlaYorum',
+                    style: TextStyle(fontSize: 7),
+                  ),
+                )
+              ],
+            ),
+          ),
+          // yorum
+        ],
+      ),
+    ],
+  );
 }

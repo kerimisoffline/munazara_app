@@ -9,9 +9,10 @@ class AuthenticationService {
 
   Future<void> signOut() async {
       try {
-        await _firebaseAuth.signOut();
+        return await _firebaseAuth.signOut();
       } catch (e) {
-        return e.message;
+        print(e.toString());
+        return null;
       }
   }
 

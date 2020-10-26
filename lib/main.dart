@@ -4,11 +4,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:munazara_app/Controller/authentication_services.dart';
+import 'package:munazara_app/View/profile_page.dart';
 import 'package:munazara_app/View/sign_in.dart';
 import 'package:provider/provider.dart';
 import 'Model/constant.dart';
-import 'View/Screens/Welcome/welcome_screen.dart';
 import 'View/ana_sayfa.dart';
 
 Future<void> main() async {
@@ -87,13 +88,24 @@ class _HomeState extends State<Home> {
       child: Text('Gruplar'),
     ),
     Center(
-      child: Text('Profilim'),
+      child: ProfilePage(),
     ),
   ];
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            await context.read<AuthenticationService>().signOut();
+            Fluttertoast.showToast(
+              msg: "SignOut",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+            );
+          },
+        ),
         backgroundColor: kPrimaryLightColor,
         appBar: getCustomAppBar(context),
         body: tabs[_currentIndex],
@@ -151,25 +163,10 @@ getCustomAppBar(context) {
         children: <Widget>[
           IconButton(
             icon: Icon(Icons.chevron_left),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => WelcomeScreen()),
-              );
-            },
+            onPressed: () {},
           ),
-          Text('Münazara Test 1.1'),
-          IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                context.read<AuthenticationService>().signOut();
-                Fluttertoast.showToast(
-                  msg: "SignOut",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                );
-              }),
+          Text('Münazara Test 1.1',style: GoogleFonts.sourceSansPro(),),
+          IconButton(icon: Icon(Icons.menu), onPressed: () {}),
         ],
       ),
     ),

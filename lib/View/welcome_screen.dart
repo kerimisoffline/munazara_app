@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:munazara_app/View/Screens/Welcome/components/body.dart';
+import 'package:munazara_app/View/body.dart';
 
 
 class WelcomeScreen extends StatelessWidget {
